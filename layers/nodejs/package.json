@@ -1,0 +1,15 @@
+{
+  "name": "commonlib-layer",
+  "version": "1.0.0",
+  "description": "layer for common libraries",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1006.0",
+    "open-graph-scraper": "^4.9.2"
+  }
+}

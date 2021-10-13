@@ -1,0 +1,61 @@
+service: metadata-scraping-service
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-1
+  environment:
+    TABLE_NAME: metadata
+
+functions:
+  candidateSubmission:
+    handler: functions/scrapper.getMetadata
+    layers:
+      - { Ref: CommonLibsLambdaLayer }
+    memorySize: 128
+    description: Submit URL to get metadata for that URL
+    events:
+      - http:
+          path: /metadata
+          method: post
+          cors: true
+
+layers:
+  commonLibs:
+    path: layers
+    compatibleRuntimes:
+      - nodejs14.x
+
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: metadata
+        AttributeDefinitions:
+          - AttributeName: url
+            AttributeType: S
+        KeySchema:
+          - AttributeName: url
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    DynamoDBIamPolicy:
+      Type: AWS::IAM::Policy
+      DependsOn: DynamoDbTable
+      Properties:
+        PolicyName: lambda-dynamodb
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+              Resource: arn:aws:dynamodb:*:*:table/metadata
+        Roles:
+          - Ref: IamRoleLambdaExecution
