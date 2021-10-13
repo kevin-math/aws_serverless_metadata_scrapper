@@ -7,4 +7,10 @@ node_modules/
 
 layers/nodejs/package-lock.json
 
+# Optional serverless cache directory
 
+.serverless
+
+#test reports
+
+test/mochawesome-report
