@@ -30,7 +30,7 @@ module.exports.getMetadata = async (event) => {
   if (!body?.url) {
     return createResponse(statusCode.BAD_REQ, messages.ValidUrlNeededMessage);
   }
-  const options = { url: body.url };
+  const options = { url: body.url.replace(/\/$/, "") };  //to remove traling slashes from URLs
 
   const existingData = await getFromDB(process.env.TABLE_NAME ?? "", options);
   if (existingData?.Item) {

@@ -1,6 +1,10 @@
 "use strict";
 const AWS = require("aws-sdk");
+// const AmazonDaxClient = require("amazon-dax-client");
+
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+// const daxClient = new AmazonDaxClient({endpoints: [process.env.DAX_ENDPOINT], region: process.env.REGION});
 
 const saveToDB = (tableName, dataObj) => {
   const params = {

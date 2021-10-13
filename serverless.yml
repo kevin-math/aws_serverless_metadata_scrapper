@@ -8,20 +8,40 @@ provider:
   stage: dev
   region: us-east-1
   environment:
+    REGION: us-east-1
     TABLE_NAME: metadata
+    # DAX_ENDPOINT: daxs://dax-cluster-******.dax-clusters.us-east-1.amazonaws.com
 
 functions:
-  candidateSubmission:
+  metadataScappingService:
     handler: functions/scrapper.getMetadata
+    timeout: 60
     layers:
       - { Ref: CommonLibsLambdaLayer }
-    memorySize: 128
+    memorySize: 512
     description: Submit URL to get metadata for that URL
+    # vpc:
+    #   securityGroupIds:
+    #     - sg-3*****5
+    #   subnetIds:
+    #     - subnet-2****f
+    #     - subnet-3****d
+    #     - subnet-5****b
     events:
       - http:
           path: /metadata
           method: post
           cors: true
+          caching:
+            enabled: true
+            ttlInSeconds: 300
+            dataEncrypted: false
+            perKeyInvalidation:
+              requireAuthorization: false
+              handleUnauthorizedRequests: IgnoreWithWarning
+            cacheKeyParameters:
+              - name: request.path.pawId
+              - name: request.header.Accept-Language
 
 layers:
   commonLibs:

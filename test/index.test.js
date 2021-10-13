@@ -19,7 +19,6 @@ describe("Metadata Scrapper Test Case", function () {
         url: urlToScrape,
       })
       .end(function (err, res) {
-        console.log(res.body.message)
         expect(res.status).to.equal(200);
         expect(res.body).to.be.an("object");
         assert.jsonSchema(res.body.message, metadataSchema);
