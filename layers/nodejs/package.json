@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1006.0",
     "open-graph-scraper": "^4.9.2"
   }
 }
